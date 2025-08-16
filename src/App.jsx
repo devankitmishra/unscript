@@ -3,14 +3,19 @@ import "./App.css";
 import Layout from "./Layout/Layout.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./Pages/Home/Home.jsx";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import theme from "./theme";
 
 function App() {
   return (
-    <AuthProvider>
-      <Layout>
-        <Home />
-      </Layout>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <Layout>
+          <Home />
+        </Layout>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

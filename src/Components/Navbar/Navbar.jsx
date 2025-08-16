@@ -83,18 +83,10 @@ const Navbar = ({ loggedIn }) => {
           {/* Logo */}
           <Box
             component="img"
-            src="/assets/unscript.svg"
+            src="/assets/sheyahe.png"
             alt="Unscript Logo"
-            sx={{ height: { sm: 40, xs: 25 }, cursor: "pointer" }}
+            sx={{ height: 60, cursor: "pointer" }}
           />
-
-          {/* Navigation Links (hidden on mobile) */}
-          {!isMobile && (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Button color="inherit">Shop</Button>
-              <Button color="inherit">Deals</Button>
-            </Box>
-          )}
 
           {/* Search Bar (on desktop in toolbar, on mobile moves down) */}
           {!isMobile && (
@@ -110,7 +102,13 @@ const Navbar = ({ loggedIn }) => {
           )}
 
           {/* Account + Cart + Help Section */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: { xs: 2, sm: 5 },
+            }}
+          >
             {/* Account */}
             <ClickAwayListener onClickAway={closeDropdown}>
               <Box sx={{ position: "relative" }}>
@@ -218,17 +216,12 @@ const Navbar = ({ loggedIn }) => {
             <IconButton color="inherit">
               <BsHandbag />
             </IconButton>
-            {!isMobile && (
-              <IconButton color="inherit">
-                <TfiHelpAlt />
-              </IconButton>
-            )}
           </Box>
         </Toolbar>
 
         {/* On mobile, move search bar below */}
         {isMobile && (
-          <Box sx={{ py: 2, width: "100%" }}>
+          <Box sx={{ pt: 0.5,pb:2, width: "100%" }}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />

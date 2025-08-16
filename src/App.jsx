@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import Home from "./pages/home/Home.jsx";
 import Layout from "./Layout/Layout.jsx";
 import { AuthProvider } from "./context/AuthContext";
+import Home from "./Pages/Home/Home.jsx";
 
 function App() {
   return (

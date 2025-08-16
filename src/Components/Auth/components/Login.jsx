@@ -1,26 +1,35 @@
-import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Stack,
-  Checkbox,
-  FormControlLabel,
-  Link,
-} from "@mui/material";
+import React from "react";
+import axios from "axios";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import { Box, TextField, Button, Typography, Stack } from "@mui/material";
+import { useAuth } from "../../../context/AuthContext";
 
-export default function Login({ onSignupClick, onLoginSuccess }) {
-  const [form, setForm] = useState({ emailOrPhone: "", password: "" });
-  const [rememberMe, setRememberMe] = useState(false);
+// Validation schema
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+});
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+const Login = ({ onSignupClick, onLoginSuccess, setEmail }) => {
 
-  const handleSubmit = () => {
-    console.log("Remember Me:", rememberMe);
-    onLoginSuccess();
+  const { setLoading } = useAuth();
+  const handleLogin = async (values) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://diva-trends-server.onrender.com/api/auth/login/send-otp",
+        {
+          email: values.email,
+        }
+      );
+      console.log("API Response:", response.data);
+      setEmail(values.email);
+      onLoginSuccess();
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,66 +38,47 @@ export default function Login({ onSignupClick, onLoginSuccess }) {
         Login
       </Typography>
 
-      <TextField
-        fullWidth
-        variant="outlined"
-        margin="normal"
-        label="Email or Mobile"
-        name="emailOrPhone"
-        value={form.emailOrPhone}
-        onChange={handleChange}
-      />
-
-      <TextField
-        fullWidth
-        type="password"
-        variant="outlined"
-        margin="normal"
-        label="Password"
-        name="password"
-        value={form.password}
-        onChange={handleChange}
-      />
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-          mt: 1,
-        }}
+      <Formik
+        initialValues={{ email: "" }}
+        validationSchema={LoginSchema}
+        onSubmit={handleLogin}
       >
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
+        {({ values, handleChange, handleBlur, isSubmitting, errors, touched }) => (
+          <Form style={{ width: "100%" }}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              label="Email"
+              name="email"
+              value={values.email}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
             />
-          }
-          label="Remember Me"
-        />
-        <Button
-        >
-          Forgot Password?
-        </Button>
-      </Box>
 
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{ mt: 2 }}
-        onClick={handleSubmit}
-      >
-        Continue
-      </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2 }}
+              type="submit"
+              disabled={isSubmitting}
+            >
+              Continue
+            </Button>
 
-      <Typography variant="body2" sx={{ mt: 2 }}>
-        New here?{" "}
-        <Button onClick={onSignupClick} sx={{ textTransform: "none" }}>
-          Create an Account
-        </Button>
-      </Typography>
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              New here?{" "}
+              <Button onClick={onSignupClick} sx={{ textTransform: "none" }}>
+                Create an Account
+              </Button>
+            </Typography>
+          </Form>
+        )}
+      </Formik>
     </Stack>
   );
-}
+};
+
+export default Login;

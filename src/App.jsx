@@ -1,15 +1,17 @@
-import { useState } from 'react'
-import './App.css'
-import Layout from './Layout/layout.jsx'
-import Home from './pages/home/Home.jsx'
+import { useState } from "react";
+import "./App.css";
+import Home from "./pages/home/Home.jsx";
+import Layout from "./Layout/Layout.jsx";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
-
   return (
-    <Layout>
-      <Home />
-    </Layout>
-  )
+    <AuthProvider>
+      <Layout>
+        <Home />
+      </Layout>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

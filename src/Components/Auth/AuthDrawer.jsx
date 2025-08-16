@@ -11,6 +11,7 @@ import SignupOtp from "./components/SignupOtp";
 
 const AuthDrawer = ({ open, onClose }) => {
   const [step, setStep] = useState("login");
+  const [email, setEmail] = useState("");
 
   const goTo = (nextStep) => setStep(nextStep);
 
@@ -43,6 +44,7 @@ const AuthDrawer = ({ open, onClose }) => {
           <Login
             onSignupClick={() => goTo("signup")}
             onLoginSuccess={() => goTo("loginOtp")}
+            setEmail={setEmail}
           />
         )}
 
@@ -50,11 +52,12 @@ const AuthDrawer = ({ open, onClose }) => {
           <Signup
             onLoginClick={() => goTo("login")}
             onSignupSuccess={() => goTo("signupOtp")}
+            setEmail={setEmail}
           />
         )}
 
-        {step === "loginOtp" && <LoginOtp onVerify={handleOtpVerified} setStep={setStep}/>}
-        {step === "signupOtp" && <SignupOtp onVerify={handleOtpVerified} setStep={setStep} />}
+        {step === "loginOtp" && <LoginOtp onVerify={handleOtpVerified} setStep={setStep} email={email}/>}
+        {step === "signupOtp" && <SignupOtp onVerify={handleOtpVerified} setStep={setStep} email={email}/>}
       </Box>
     </Drawer>
   );

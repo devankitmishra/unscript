@@ -4,3 +4,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background-color: #f5f5f5;
 }
+
+.css-un0yd3-MuiToolbar-root{
+  padding-left: 0;
+  padding-right: 0;
+}

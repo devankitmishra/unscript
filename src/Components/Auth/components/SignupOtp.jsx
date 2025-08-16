@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { MuiOtpInput } from "mui-one-time-password-input";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { useAuth } from "../../../context/AuthContext";
 
-export default function SignupOtp({ onVerify, setStep }) {
-  const [otp, setOtp] = useState("");
+// ✅ Validation schema
+const validationSchema = Yup.object({
+  otp: Yup.string()
+    .matches(/^[0-9]{6}$/, "OTP must be 6 digits")
+    .required("OTP is required"),
+});
+
+const SignupOtp = ({ onVerify, setStep, email }) => {
   const [timer, setTimer] = useState(30);
+  const { setLoading, login } = useAuth();
 
+  // countdown timer
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -15,68 +27,102 @@ export default function SignupOtp({ onVerify, setStep }) {
     }
   }, [timer]);
 
-  const handleChange = (value) => setOtp(value);
+  const formik = useFormik({
+    initialValues: { otp: "" },
+    validationSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          "https://diva-trends-server.onrender.com/api/auth/register/verify-otp",
+          {
+            email,
+            otp: values.otp,
+          }
+        );
+        console.log("OTP Verified ✅", response.data);
+        login(response.data.token);
 
-  const handleSubmit = () => {
-    // verify OTP logic
-    onVerify();
-  };
+        onVerify(response.data);
+      } catch (error) {
+        console.error(
+          "OTP Verify Error:",
+          error.response?.data || error.message
+        );
+      } finally {
+        setSubmitting(false);
+        setLoading(false);
+      }
+    },
+  });
 
   const handleResend = () => {
     setTimer(30); // restart timer
-    alert("Resend OTP functionality not implemented yet");
+    // TODO: call resend OTP API if available
+    console.log("Resend OTP triggered");
   };
 
   return (
-    <Stack alignItems="center" spacing={2}>
-      <Typography variant="h5" gutterBottom>
-        Enter OTP
-      </Typography>
-      <Typography>
-        A 6-digit OTP has been sent to your registered email or mobile number.
-        Please enter it below to continue.
-      </Typography>
-      <MuiOtpInput
-        value={otp}
-        onChange={handleChange}
-        length={6}
-        sx={{ mt: 2 }}
-        width={"100%"}
-      />
+    <form onSubmit={formik.handleSubmit}>
+      <Stack alignItems="center" spacing={2}>
+        <Typography variant="h5" gutterBottom>
+          Enter OTP
+        </Typography>
+        <Typography>
+          A 6-digit OTP has been sent to your registered email or mobile number.
+          Please enter it below to continue.
+        </Typography>
 
-      <Typography variant="body2" sx={{ mt: 2 }}>
-        {timer > 0
-          ? `You can resend OTP after ${timer} sec`
-          : "You can now resend the OTP"}
-      </Typography>
+        <MuiOtpInput
+          value={formik.values.otp}
+          onChange={(value) => formik.setFieldValue("otp", value)}
+          length={6}
+          sx={{ mt: 2 }}
+          width="100%"
+        />
 
-      <Button
-        fullWidth
-        variant="outlined"
-        onClick={handleResend}
-        sx={{ textTransform: "none", mt: 2 }}
-        disabled={timer > 0}
-      >
-        Resend OTP
-      </Button>
+        {formik.touched.otp && formik.errors.otp && (
+          <Typography variant="body2" color="error">
+            {formik.errors.otp}
+          </Typography>
+        )}
 
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{ textTransform: "none", mt: 2 }}
-        onClick={handleSubmit}
-      >
-        Verify & Create Account
-      </Button>
-      <Button
-        fullWidth
-        sx={{ textTransform: "none", mt: 2 }}
-        onClick={() => {
-          setStep("signup");
-        }}
-      >
-        Go Back
-      </Button>
-    </Stack>
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          {timer > 0
+            ? `You can resend OTP after ${timer} sec`
+            : "You can now resend the OTP"}
+        </Typography>
+
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={handleResend}
+          sx={{ textTransform: "none", mt: 2 }}
+          disabled={timer > 0}
+        >
+          Resend OTP
+        </Button>
+
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ textTransform: "none", mt: 2 }}
+          type="submit"
+          disabled={formik.isSubmitting}
+        >
+          {formik.isSubmitting ? "Verifying..." : "Verify & Create Account"}
+        </Button>
+
+        <Button
+          fullWidth
+          sx={{ textTransform: "none", mt: 2 }}
+          onClick={() => setStep("signup")}
+        >
+          Go Back
+        </Button>
+      </Stack>
+    </form>
   );
-}
+};
+
+export default SignupOtp;

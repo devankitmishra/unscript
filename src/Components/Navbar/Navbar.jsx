@@ -20,15 +20,18 @@ import { useAuth } from "../../context/AuthContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 // Styled search components
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
+  // borderRadius: 0,
+  // backgroundColor: alpha(theme.palette.common.black, 0.15),
+  // "&:hover": {
+  //   backgroundColor: alpha(theme.palette.common.black, 0.25),
+  // },
+  border: `1px solid ${theme.palette.common.black}`,
   height: 40,
   width: "100%",
   [theme.breakpoints.up("md")]: {
@@ -49,7 +52,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
+  // color: "inherit",
   width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
@@ -67,13 +70,22 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
   const theme = useTheme();
   const { logout } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const navigate = useNavigate();
 
   const toggleDropdown = () => setOpenDropdown((prev) => !prev);
   const closeDropdown = () => setOpenDropdown(false);
 
   return (
     <>
-      <AppBar position="static" sx={{ paddingX: { xs: 2, md: 5 } }}>
+      <AppBar
+        position="static"
+        sx={{
+          paddingX: { xs: 2, md: 5 },
+          backgroundColor: "white",
+          color: theme.palette.primary.main,
+          boxShadow: 1,
+        }}
+      >
         <Toolbar
           sx={{
             justifyContent: "space-between",
@@ -88,7 +100,11 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
             pl={1}
             gap={{ xs: 0, sm: 5 }}
           >
-            <IconButton color="inherit" edge="start" onClick={onMenuToggle}>
+            <IconButton
+              edge="start"
+              onClick={onMenuToggle}
+              sx={{ color: "primary.main" }}
+            >
               <MenuIcon />
             </IconButton>
             {/* Logo */}
@@ -97,18 +113,20 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
               src="/assets/sheyahe.png"
               alt="Unscript Logo"
               sx={{ height: 60, cursor: "pointer" }}
+              onClick={() => navigate("/")}
             />
           </Stack>
 
           {/* Search Bar (on desktop in toolbar, on mobile moves down) */}
           {!isMobile && (
-            <Search>
+            <Search sx={{ borderColor: "primary.main" }}>
               <SearchIconWrapper>
-                <SearchIcon />
+                <SearchIcon style={{ color: theme.palette.primary.main }} />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search…"
+                placeholder="Search for products"
                 inputProps={{ "aria-label": "search" }}
+                sx={{ color: "primary.main" }}
               />
             </Search>
           )}
@@ -138,7 +156,12 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                         onClick={toggleDropdown}
                         sx={{
                           textTransform: "none",
-                          borderColor: "white",
+                          borderColor: "primary.main",
+                          color: "primary.main",
+                          "&:hover": {
+                            borderColor: "secondary.main",
+                            color: "secondary.main",
+                          },
                           transition: "color 0.2s, border-color 0.2s",
                         }}
                       >
@@ -152,7 +175,7 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                           position: "absolute",
                           top: "calc(100% + 8px)",
                           right: 0,
-                          bgcolor: "background.paper",
+                          // bgcolor: "background.paper",
                           color: "text.primary",
                           borderRadius: 1,
                           boxShadow: 3,
@@ -202,11 +225,16 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                 ) : (
                   <>
                     <Button
-                      color="inherit"
+                      // color="inherit"
                       variant="outlined"
                       onClick={() => setAuthDrawerOpen(true)}
                       size="medium"
-                      sx={{ display: { xs: "none", sm: "block" } }}
+                      sx={{
+                        display: { xs: "none", sm: "block" },
+                        borderColor: "primary.main",
+                        color: "primary.main",
+                        
+                      }}
                     >
                       Login / SignUp
                     </Button>
@@ -225,7 +253,7 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
             </ClickAwayListener>
 
             {/* Cart & Help Icons */}
-            <IconButton color="inherit">
+            <IconButton sx={{ color: "primary.main" }}>
               <BsHandbag />
             </IconButton>
           </Box>
@@ -239,7 +267,7 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search…"
+                placeholder="Search for products"
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>

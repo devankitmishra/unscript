@@ -78,7 +78,18 @@ const SignupOtp = ({ onVerify, setStep, email }) => {
           value={formik.values.otp}
           onChange={(value) => formik.setFieldValue("otp", value)}
           length={6}
-          sx={{ mt: 2 }}
+          sx={{
+            mt: 2,
+            display: "flex",
+            justifyContent: "center", // center OTP in screen
+            gap: 1, // spacing between boxes
+            "& input": {
+              width: { xs: 40, sm: 50 }, // responsive square size
+              height: { xs: 20, sm: 30 },
+              textAlign: "center",
+              fontSize: "1.25rem",
+            },
+          }}
           width="100%"
         />
 

@@ -36,7 +36,7 @@ const Login = ({ onSignupClick, onLoginSuccess, setEmail }) => {
   return (
     <Stack alignItems="center">
       <Typography variant="h5" gutterBottom>
-        Login
+        Login to Your Account
       </Typography>
 
       <Formik
@@ -45,7 +45,7 @@ const Login = ({ onSignupClick, onLoginSuccess, setEmail }) => {
         onSubmit={handleLogin}
       >
         {({ values, handleChange, handleBlur, isSubmitting, errors, touched }) => (
-          <Form style={{ width: "100%" }}>
+          <Form style={{ width: "100%" , display: "flex", flexDirection: "column", alignItems: "center"}}>
             <TextField
               fullWidth
               variant="outlined"

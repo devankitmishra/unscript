@@ -16,7 +16,7 @@ const OtpSchema = Yup.object().shape({
 
 const LoginOtp = ({ email, onVerify, setStep }) => {
   const [timer, setTimer] = useState(30);
-  const { login ,setLoading } = useAuth();
+  const { login, setLoading } = useAuth();
 
   useEffect(() => {
     if (timer > 0) {
@@ -69,15 +69,34 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
         validationSchema={OtpSchema}
         onSubmit={handleOtpSubmit}
       >
-        {({ values, handleChange, handleSubmit, isSubmitting, errors, touched, setFieldValue }) => (
+        {({
+          values,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+          errors,
+          touched,
+          setFieldValue,
+        }) => (
           <Form style={{ width: "100%" }}>
             <MuiOtpInput
               value={values.otp}
               onChange={(val) => setFieldValue("otp", val)}
               length={6}
-              sx={{ mt: 2 }}
-              width="100%"
+              sx={{
+                mt: 2,
+                display: "flex",
+                justifyContent: "center", // center OTP in screen
+                gap: 1, // spacing between boxes
+                "& input": {
+                  width: { xs: 40, sm: 50 }, // responsive square size
+                  height: { xs: 20, sm: 30 },
+                  textAlign: "center",
+                  fontSize: "1.25rem",
+                },
+              }}
             />
+
             {touched.otp && errors.otp && (
               <Typography color="error" variant="body2" sx={{ mt: 1 }}>
                 {errors.otp}

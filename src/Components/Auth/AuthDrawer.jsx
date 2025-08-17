@@ -28,18 +28,38 @@ const AuthDrawer = ({ open, onClose }) => {
       PaperProps={{
         sx: {
           width: { xs: "100%", sm: 500 },
-          //   display:"flex",
-          // flexDirection: "column",
-          // justifyContent: "center",
-          // alignItems: "center",
         },
       }}
     >
       {/* Close Button */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
+      <Box
+        sx={{
+          display: { xs: "none", md: "flex" },
+          justifyContent: "flex-end",
+          p: 1,
+        }}
+      >
         <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          p: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          mt: { xs: 4, sm: 0 },
+        }}
+      >
+        <Box
+          component="img"
+          src="/assets/sheyahe.png"
+          alt="Unscript Logo"
+          sx={{ height: 100, cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        />
       </Box>
 
       {/* Drawer Content */}
@@ -74,6 +94,26 @@ const AuthDrawer = ({ open, onClose }) => {
             email={email}
           />
         )}
+      </Box>
+
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          p: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <IconButton
+          onClick={onClose}
+          sx={{
+            borderRadius: "50%",
+            border: "1px solid #050f28",
+            color: "primary.main",
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Box>
     </Drawer>
   );

@@ -14,7 +14,7 @@ import {
   ExpandMore,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { baseUrl } from "../../Config/Config";
 
 const drawerWidth = 300;
@@ -23,6 +23,7 @@ const SideNav = ({ mobileOpen, onClose }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [openItems, setOpenItems] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Fetch menu data immediately on mount
   useEffect(() => {
@@ -32,49 +33,80 @@ const SideNav = ({ mobileOpen, onClose }) => {
       .catch((err) => console.error("Error fetching menu:", err));
   }, []);
 
-  // Toggle collapse
-  const handleToggle = (id) => {
-    setOpenItems((prev) => ({ ...prev, [id]: !prev[id] }));
+  // Toggle collapse (accordion per level)
+  const handleToggle = (id, level) => {
+    setOpenItems((prev) => {
+      // find open at same level
+      const currentOpenAtLevel = Object.keys(prev).find(
+        (key) => prev[key]?.level === level && prev[key]?.open
+      );
+
+      const newState = { ...prev };
+
+      // close sibling at same level
+      if (currentOpenAtLevel && currentOpenAtLevel !== id.toString()) {
+        newState[currentOpenAtLevel] = {
+          ...newState[currentOpenAtLevel],
+          open: false,
+        };
+      }
+
+      // toggle clicked item
+      newState[id] = { level, open: !(prev[id]?.open) };
+
+      return newState;
+    });
   };
 
-  // Handle click: navigate + toggle if children
-  const handleClick = (item) => {
+  // Handle click
+  const handleClick = (item, level) => {
     if (item.children?.length > 0) {
-      handleToggle(item.id);
+      handleToggle(item.id, level);
     } else {
       navigate(item.fullPath);
-      console.log("Navigating to:", item.fullPath);
       onClose();
     }
   };
 
   // Recursive menu rendering
   const renderMenu = (items, level = 0) =>
-    items.map((item) => (
-      <React.Fragment key={item.id}>
-        <ListItemButton
-          sx={{ pl: 2 + level * 2 }}
-          onClick={() => handleClick(item)}
-        >
-          <ListItemText primary={item.title.toUpperCase()} />
-          {item.children?.length ? (
-            openItems[item.id] ? (
-              <ExpandLess />
-            ) : (
-              <ExpandMore />
-            )
-          ) : null}
-        </ListItemButton>
+    items.map((item) => {
+      const isActive =
+        location.pathname === item.fullPath && !item.children?.length;
+      const isOpen = openItems[item.id]?.open || false;
 
-        {item.children?.length > 0 && (
-          <Collapse in={openItems[item.id]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {renderMenu(item.children, level + 1)}
-            </List>
-          </Collapse>
-        )}
-      </React.Fragment>
-    ));
+      return (
+        <React.Fragment key={item.id}>
+          <ListItemButton
+            sx={{ pl: 2 + level * 2 }}
+            onClick={() => handleClick(item, level)}
+          >
+            <ListItemText
+              primary={item.title.toUpperCase()}
+              sx={{
+                "& .MuiTypography-root": {
+                  fontSize: "0.85rem",
+                  fontFamily: "Arial, sans-serif",
+                  fontWeight: "bold",
+                  color: isActive ? "primary.main" : "#4c4c4c",
+                },
+              }}
+            />
+            {item.children?.length ? (
+              isOpen ? <ExpandLess /> : <ExpandMore />
+            ) : null}
+          </ListItemButton>
+
+          {item.children?.length > 0 && (
+            <Collapse in={isOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {renderMenu(item.children, level + 1)}
+              </List>
+            </Collapse>
+          )}
+        </React.Fragment>
+      );
+    });
 
   return (
     <Box component="nav">
@@ -100,7 +132,6 @@ const SideNav = ({ mobileOpen, onClose }) => {
             py: 1.5,
           }}
         >
-          {/* Replace with your logo image if needed */}
           <Box
             component="img"
             src="/assets/sheyahe.png"
@@ -119,12 +150,10 @@ const SideNav = ({ mobileOpen, onClose }) => {
         {/* Menu Items */}
         <List
           sx={{
-            // normal scrolling
             overflowY: "auto",
-            // hide scrollbar (cross-browser)
             "&::-webkit-scrollbar": { display: "none" },
-            msOverflowStyle: "none", // IE + Edge
-            scrollbarWidth: "none", // Firefox
+            msOverflowStyle: "none",
+            scrollbarWidth: "none",
           }}
         >
           {renderMenu(menuItems)}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, TextField, Button, Typography, Stack } from "@mui/material";
+import { TextField, Button, Typography, Stack } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -110,7 +110,7 @@ const Signup = ({ onLoginClick, onSignupSuccess, setEmail }) => {
 
         <Typography variant="body2" sx={{ mt: 2 }}>
           Already have an account?{" "}
-          <Button onClick={onLoginClick}>Login</Button>
+          <Button onClick={onLoginClick} sx={{ textTransform: "none" }}>Login</Button>
         </Typography>
       </Stack>
     </form>

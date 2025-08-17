@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#D2691E",
+      main: "#050f28",
       // temp1:"#5d83cf",
       // temp2:"#f2587b",
       // temp3:"#0f466e",
@@ -16,9 +16,8 @@ const theme = createTheme({
       brown: "#A0522D",
       light: "#D2691E",
       chocolate: "#8B4513",
-      maroon:"#800000",
-      wine:"#4A0404",
-
+      maroon: "#800000",
+      wine: "#4A0404",
     },
     secondary: {
       main: "#3F51B5",
@@ -43,8 +42,8 @@ const theme = createTheme({
     // MuiButton: {
     //   styleOverrides: {
     //     root: {
-    //       borderRadius: 8,
-    //       padding: "8px 20px",
+    //       borderRadius: 0,
+    //       // padding: "8px 20px",
     //     },
     //   },
     // },
@@ -52,6 +51,27 @@ const theme = createTheme({
     //   styleOverrides: {
     //     root: {
     //       color: "#FF4081",
+    //     },
+    //   },
+    // },
+    // MuiOutlinedInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       borderRadius: 0,
+    //     },
+    //   },
+    // },
+    // MuiFilledInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       borderRadius: 0,
+    //     },
+    //   },
+    // },
+    // MuiInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       borderRadius: 0,
     //     },
     //   },
     // },

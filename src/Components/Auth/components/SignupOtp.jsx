@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
+import { baseUrl } from "../../../Config/Config";
 
 // ✅ Validation schema
 const validationSchema = Yup.object({
@@ -34,7 +35,7 @@ const SignupOtp = ({ onVerify, setStep, email }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          "https://diva-trends-server.onrender.com/api/auth/register/verify-otp",
+          `${baseUrl}/api/auth/register/verify-otp`,
           {
             email,
             otp: values.otp,

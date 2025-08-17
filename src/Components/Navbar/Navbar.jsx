@@ -16,8 +16,10 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { VscPackage } from "react-icons/vsc";
 import AuthDrawer from "../Auth/AuthDrawer";
 import { IoMdHeartEmpty } from "react-icons/io";
-import { useAuth } from "../../context/AuthContext"; // ✅ auth context
+import { useAuth } from "../../context/AuthContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Stack } from "@mui/material";
 
 // Styled search components
 const Search = styled("div")(({ theme }) => ({
@@ -59,7 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Navbar = ({ loggedIn }) => {
+const Navbar = ({ loggedIn, onMenuToggle }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [authDrawerOpen, setAuthDrawerOpen] = useState(false);
   const theme = useTheme();
@@ -80,13 +82,23 @@ const Navbar = ({ loggedIn }) => {
             px: { xs: 0, sm: 2 },
           }}
         >
-          {/* Logo */}
-          <Box
-            component="img"
-            src="/assets/sheyahe.png"
-            alt="Unscript Logo"
-            sx={{ height: 60, cursor: "pointer" }}
-          />
+          <Stack
+            direction={"row"}
+            alignItems="center"
+            pl={1}
+            gap={{ xs: 0, sm: 5 }}
+          >
+            <IconButton color="inherit" edge="start" onClick={onMenuToggle}>
+              <MenuIcon />
+            </IconButton>
+            {/* Logo */}
+            <Box
+              component="img"
+              src="/assets/sheyahe.png"
+              alt="Unscript Logo"
+              sx={{ height: 60, cursor: "pointer" }}
+            />
+          </Stack>
 
           {/* Search Bar (on desktop in toolbar, on mobile moves down) */}
           {!isMobile && (
@@ -221,7 +233,7 @@ const Navbar = ({ loggedIn }) => {
 
         {/* On mobile, move search bar below */}
         {isMobile && (
-          <Box sx={{ pt: 0.5,pb:2, width: "100%" }}>
+          <Box sx={{ pt: 0.5, pb: 2, width: "100%" }}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />

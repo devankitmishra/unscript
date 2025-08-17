@@ -28,6 +28,10 @@ const AuthDrawer = ({ open, onClose }) => {
       PaperProps={{
         sx: {
           width: { xs: "100%", sm: 500 },
+          //   display:"flex",
+          // flexDirection: "column",
+          // justifyContent: "center",
+          // alignItems: "center",
         },
       }}
     >
@@ -56,8 +60,20 @@ const AuthDrawer = ({ open, onClose }) => {
           />
         )}
 
-        {step === "loginOtp" && <LoginOtp onVerify={handleOtpVerified} setStep={setStep} email={email}/>}
-        {step === "signupOtp" && <SignupOtp onVerify={handleOtpVerified} setStep={setStep} email={email}/>}
+        {step === "loginOtp" && (
+          <LoginOtp
+            onVerify={handleOtpVerified}
+            setStep={setStep}
+            email={email}
+          />
+        )}
+        {step === "signupOtp" && (
+          <SignupOtp
+            onVerify={handleOtpVerified}
+            setStep={setStep}
+            email={email}
+          />
+        )}
       </Box>
     </Drawer>
   );

@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Box, Stack, IconButton } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
-
-const BASE_URL = "https://diva-trends-server.onrender.com";
+import { baseUrl } from "../../Config/Config";
 
 const Home = () => {
   const [banners, setBanners] = useState([]);
@@ -15,7 +14,7 @@ const Home = () => {
   useEffect(() => {
   setLoading(true);
   axios
-    .get(`${BASE_URL}/api/banners`)
+    .get(`${baseUrl}/api/banners`)
     .then((res) => {
       setBanners(res.data);
       setLoading(false);

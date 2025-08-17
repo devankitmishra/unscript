@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useAuth } from "../../../context/AuthContext";
+import { baseUrl } from "../../../Config/Config";
 
 // Validation schema for OTP
 const OtpSchema = Yup.object().shape({
@@ -35,7 +36,7 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://diva-trends-server.onrender.com/api/auth/login/verify-otp",
+        `${baseUrl}/api/auth/login/verify-otp`,
         {
           email,
           otp: Number(values.otp),

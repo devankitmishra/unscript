@@ -4,6 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Box, TextField, Button, Typography, Stack } from "@mui/material";
 import { useAuth } from "../../../context/AuthContext";
+import { baseUrl } from "../../../Config/Config";
 
 // Validation schema
 const LoginSchema = Yup.object().shape({
@@ -17,7 +18,7 @@ const Login = ({ onSignupClick, onLoginSuccess, setEmail }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://diva-trends-server.onrender.com/api/auth/login/send-otp",
+        `${baseUrl}/api/auth/login/send-otp`,
         {
           email: values.email,
         }

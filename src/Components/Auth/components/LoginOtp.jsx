@@ -57,9 +57,9 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
   return (
     <Stack alignItems="center" spacing={2}>
       <Typography variant="h5" gutterBottom>
-        Enter OTP
+        Enter OTP to Login
       </Typography>
-      <Typography>
+      <Typography align="center">
         A 6-digit OTP has been sent to your registered email or mobile number.
         Please enter it below to continue.
       </Typography>
@@ -103,7 +103,7 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
               </Typography>
             )}
 
-            <Typography variant="body2" sx={{ mt: 2 }}>
+            <Typography variant="body2" sx={{ mt: 2 }} align="center">
               {timer > 0
                 ? `You can resend OTP after ${timer} sec`
                 : "You can now resend the OTP"}

@@ -69,7 +69,7 @@ const SignupOtp = ({ onVerify, setStep, email }) => {
         <Typography variant="h5" gutterBottom>
           Enter OTP
         </Typography>
-        <Typography>
+        <Typography align="center">
           A 6-digit OTP has been sent to your registered email or mobile number.
           Please enter it below to continue.
         </Typography>

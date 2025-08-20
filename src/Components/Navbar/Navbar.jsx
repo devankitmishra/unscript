@@ -21,24 +21,28 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { MdSearch, MdClose } from "react-icons/md";
+import Slide from "@mui/material/Slide";
 
 // Styled search components
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  // borderRadius: 0,
-  // backgroundColor: alpha(theme.palette.common.black, 0.15),
-  // "&:hover": {
-  //   backgroundColor: alpha(theme.palette.common.black, 0.25),
-  // },
-  border: `1px solid ${theme.palette.common.black}`,
-  height: 40,
+  backgroundColor: alpha(theme.palette.common.black, 0.05),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.black, 0.1),
+  },
   width: "100%",
   [theme.breakpoints.up("md")]: {
     width: "60ch",
   },
-  display: "flex",
-  alignItems: "center",
+  // 👇 override for mobile
+  [theme.breakpoints.down("sm")]: {
+    backgroundColor: "transparent",
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+  },
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -52,14 +56,12 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  // color: "inherit",
   width: "100%",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    padding: theme.spacing(1.5, 0, 1.5, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(5)})`,
     height: "100%",
-    fontSize: "1rem",
-    boxSizing: "border-box",
+    fontSize: 16,
     width: "100%",
   },
 }));
@@ -67,6 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = ({ loggedIn, onMenuToggle }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [authDrawerOpen, setAuthDrawerOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const theme = useTheme();
   const { logout } = useAuth();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -77,13 +80,14 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
 
   return (
     <>
+      {/* Navbar */}
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           paddingX: { xs: 2, md: 5 },
           backgroundColor: "white",
           color: theme.palette.primary.main,
-          boxShadow: 1,
+          boxShadow: 0,
         }}
       >
         <Toolbar
@@ -117,7 +121,7 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
             />
           </Stack>
 
-          {/* Search Bar (on desktop in toolbar, on mobile moves down) */}
+          {/* Search Bar (desktop only) */}
           {!isMobile && (
             <Search sx={{ borderColor: "primary.main" }}>
               <SearchIconWrapper>
@@ -131,21 +135,34 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
             </Search>
           )}
 
-          {/* Account + Cart + Help Section */}
+          {/* Right Side Section */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: { xs: 2, sm: 5 },
+              gap: { xs: 1.5, sm: 5 },
             }}
           >
+            {/* Search Icon (Mobile only) */}
+            {isMobile && (
+              <IconButton
+                onClick={() => setMobileSearchOpen((prev) => !prev)}
+                sx={{ color: "primary.main" }}
+              >
+                <MdSearch size={22} />
+              </IconButton>
+            )}
+
             {/* Account */}
             <ClickAwayListener onClickAway={closeDropdown}>
               <Box sx={{ position: "relative" }}>
                 {loggedIn ? (
                   <>
                     {isMobile ? (
-                      <IconButton color="inherit" onClick={toggleDropdown}>
+                      <IconButton
+                        color="inherit"
+                        onClick={() => navigate("/account")}
+                      >
                         <BiUser size={24} />
                       </IconButton>
                     ) : (
@@ -153,7 +170,7 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                         variant="outlined"
                         color="inherit"
                         startIcon={<BiUser size={22} />}
-                        onClick={toggleDropdown}
+                        onClick={() => navigate("/account")}
                         sx={{
                           textTransform: "none",
                           borderColor: "primary.main",
@@ -168,79 +185,21 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                         Account
                       </Button>
                     )}
-
-                    {openDropdown && (
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          top: "calc(100% + 8px)",
-                          right: 0,
-                          // bgcolor: "background.paper",
-                          color: "text.primary",
-                          borderRadius: 1,
-                          boxShadow: 3,
-                          minWidth: 150,
-                          zIndex: 9999,
-                          p: 1,
-                        }}
-                      >
-                        {[
-                          { icon: <MdOutlineSettings />, label: "Settings" },
-                          { icon: <VscPackage />, label: "Orders" },
-                          { icon: <IoMdHeartEmpty />, label: "Wishlist" },
-                          {
-                            icon: <TbLogout />,
-                            label: "Logout",
-                            action: logout,
-                          },
-                        ].map((item, idx) => (
-                          <Box
-                            key={idx}
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              p: 1,
-                              cursor: "pointer",
-                              borderRadius: 1,
-                              gap: 1,
-                              "&:hover": {
-                                bgcolor: alpha(
-                                  theme.palette.primary.main,
-                                  theme.palette.action.hoverOpacity
-                                ),
-                              },
-                            }}
-                            onClick={() => {
-                              if (item.action) item.action();
-                              closeDropdown();
-                            }}
-                          >
-                            {item.icon}
-                            {item.label}
-                          </Box>
-                        ))}
-                      </Box>
-                    )}
                   </>
                 ) : (
                   <>
                     <Button
-                      // color="inherit"
-                      variant="outlined"
+                      variant="contained"
                       onClick={() => setAuthDrawerOpen(true)}
                       size="medium"
                       sx={{
                         display: { xs: "none", sm: "block" },
-                        borderColor: "primary.main",
-                        color: "primary.main",
-                        
                       }}
                     >
                       Login / SignUp
                     </Button>
                     <Button
-                      color="inherit"
-                      variant="outlined"
+                      variant="contained"
                       onClick={() => setAuthDrawerOpen(true)}
                       size="small"
                       sx={{ display: { xs: "block", sm: "none" } }}
@@ -252,28 +211,63 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
               </Box>
             </ClickAwayListener>
 
-            {/* Cart & Help Icons */}
-            <IconButton sx={{ color: "primary.main" }}>
+            {/* Cart */}
+            <IconButton
+              sx={{ color: "primary.main" }}
+              onClick={() => navigate("/cart")}
+            >
               <BsHandbag />
             </IconButton>
           </Box>
         </Toolbar>
-
-        {/* On mobile, move search bar below */}
-        {isMobile && (
-          <Box sx={{ pt: 0.5, pb: 2, width: "100%" }}>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search for products"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </Search>
-          </Box>
-        )}
       </AppBar>
+
+      {/* Spacer to prevent content overlap */}
+      <Box sx={{ height: { xs: 56, sm: 64 } }} />
+
+      {/* Mobile Search Slide */}
+      {isMobile && (
+        <Slide
+          direction="down"
+          in={mobileSearchOpen}
+          mountOnEnter
+          unmountOnExit
+        >
+          <Box
+            sx={{
+              position: "fixed",
+              top: { xs: 60 }, // directly below AppBar
+              left: 0,
+              right: 0,
+              bgcolor: "white",
+              px: 2,
+              py: 1.5,
+              zIndex: (theme) => theme.zIndex.appBar - 1,
+              boxShadow: 2,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {/* Search Input */}
+            <Box sx={{ flexGrow: 1 }}>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase placeholder="Search products..." autoFocus />
+              </Search>
+            </Box>
+
+            {/* X (Close) Icon */}
+            <IconButton
+              onClick={() => setMobileSearchOpen(false)}
+              sx={{ ml: 1, color: "primary.main" }}
+            >
+              <MdClose size={22} />
+            </IconButton>
+          </Box>
+        </Slide>
+      )}
 
       {/* Auth Drawer */}
       <AuthDrawer

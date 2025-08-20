@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
 import { baseUrl } from "../../../Config/Config";
+import CustomOtpInput from "./CustomOtpInput";
 
 // ✅ Validation schema
 const validationSchema = Yup.object({
@@ -74,7 +75,7 @@ const SignupOtp = ({ onVerify, setStep, email }) => {
           Please enter it below to continue.
         </Typography>
 
-        <MuiOtpInput
+        {/* <MuiOtpInput
           value={formik.values.otp}
           onChange={(value) => formik.setFieldValue("otp", value)}
           length={6}
@@ -91,6 +92,11 @@ const SignupOtp = ({ onVerify, setStep, email }) => {
             },
           }}
           width="100%"
+        /> */}
+        <CustomOtpInput
+          value={formik.values.otp}
+          onChange={(val) => formik.setFieldValue("otp", val)}
+          length={6}
         />
 
         {formik.touched.otp && formik.errors.otp && (

@@ -6,6 +6,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useAuth } from "../../../context/AuthContext";
 import { baseUrl } from "../../../Config/Config";
+import CustomOtpInput from "./CustomOtpInput";
 
 // Validation schema for OTP
 const OtpSchema = Yup.object().shape({
@@ -79,7 +80,7 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
           setFieldValue,
         }) => (
           <Form style={{ width: "100%" }}>
-            <MuiOtpInput
+            {/* <MuiOtpInput
               value={values.otp}
               onChange={(val) => setFieldValue("otp", val)}
               length={6}
@@ -95,6 +96,11 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
                   fontSize: "1.25rem",
                 },
               }}
+            /> */}
+            <CustomOtpInput
+              value={values.otp}
+              onChange={(val) => setFieldValue("otp", val)}
+              length={6}
             />
 
             {touched.otp && errors.otp && (

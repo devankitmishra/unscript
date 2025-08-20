@@ -110,7 +110,7 @@ const Signup = ({ onLoginClick, onSignupSuccess, setEmail }) => {
 
         <Typography variant="body2" sx={{ mt: 2 }}>
           Already have an account?{" "}
-          <Button onClick={onLoginClick} sx={{ textTransform: "none" }}>Login</Button>
+          <Button onClick={onLoginClick} sx={{ textTransform: "none" }}>Go to Login</Button>
         </Typography>
       </Stack>
     </form>

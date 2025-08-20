@@ -8,6 +8,7 @@ import {
   Box,
   IconButton,
   Divider,
+  Button,
 } from "@mui/material";
 import {
   ExpandLess,
@@ -52,7 +53,7 @@ const SideNav = ({ mobileOpen, onClose }) => {
       }
 
       // toggle clicked item
-      newState[id] = { level, open: !(prev[id]?.open) };
+      newState[id] = { level, open: !prev[id]?.open };
 
       return newState;
     });
@@ -93,7 +94,11 @@ const SideNav = ({ mobileOpen, onClose }) => {
               }}
             />
             {item.children?.length ? (
-              isOpen ? <ExpandLess /> : <ExpandMore />
+              isOpen ? (
+                <ExpandLess />
+              ) : (
+                <ExpandMore />
+              )
             ) : null}
           </ListItemButton>
 
@@ -157,6 +162,18 @@ const SideNav = ({ mobileOpen, onClose }) => {
           }}
         >
           {renderMenu(menuItems)}
+          {/* <Button
+          variant="contained"
+          sx={{
+            mx: 2,
+          }}
+            onClick={() => {
+              onclose();
+              // sessionStorage.clear();
+            }}
+          >
+            Logout
+          </Button> */}
         </List>
       </Drawer>
     </Box>

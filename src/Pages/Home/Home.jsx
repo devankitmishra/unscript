@@ -7,31 +7,32 @@ import { baseUrl } from "../../Config/Config";
 const Home = () => {
   const [banners, setBanners] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const slideInterval = useRef(null);
   const { setLoading } = useAuth();
 
-  // Fetch banners without caching
+  // Fetch banners
   useEffect(() => {
-  setLoading(true);
-  axios
-    .get(`${baseUrl}/api/banners`)
-    .then((res) => {
-      setBanners(res.data);
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error("Failed to fetch banners:", err);
-      setLoading(false);
-    });
-}, []);
+    setLoading(true);
+    axios
+      .get(`${baseUrl}/api/banners`)
+      .then((res) => {
+        setBanners(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch banners:", err);
+        setLoading(false);
+      });
+  }, []);
 
-
-  // Slide effect
+  // Auto slide
   useEffect(() => {
     if (banners.length === 0) return;
 
     slideInterval.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % banners.length);
+      setCurrentIndex((prev) => prev + 1);
+      setIsTransitioning(true);
     }, 3000);
 
     return () => clearInterval(slideInterval.current);
@@ -39,17 +40,36 @@ const Home = () => {
 
   if (banners.length === 0) return null;
 
-  const HEADER_HEIGHT = 64; 
+  const HEADER_HEIGHT = 64;
+
+  const handleTransitionEnd = () => {
+    // When we reach the cloned slide, reset without animation
+    if (currentIndex === banners.length) {
+      setIsTransitioning(false); // disable animation
+      setCurrentIndex(0); // jump back to first
+    }
+  };
 
   return (
-    <Box sx={{ position: "relative", overflow: "hidden", width: "100%", maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)`, py: {xs:2, sm: 0} }}>
+    <Box
+      sx={{
+        position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)`,
+        py: { xs: 2.5, sm: 0 },
+      }}
+    >
       {/* Slider wrapper */}
       <Stack
         direction="row"
+        onTransitionEnd={handleTransitionEnd}
         sx={{
-          width: `${banners.length * 100}%`,
-          transform: `translateX(-${currentIndex * (100 / banners.length)}%)`,
-          transition: "transform 0.5s ease-in-out",
+          width: `${(banners.length + 1) * 100}%`,
+          transform: `translateX(-${
+            currentIndex * (100 / (banners.length + 1))
+          }%)`,
+          transition: isTransitioning ? "transform 0.5s ease-in-out" : "none",
           height: "100%",
         }}
       >
@@ -57,9 +77,8 @@ const Home = () => {
           <Box
             key={banner.id}
             component="a"
-            // href={banner.redirectUrl || "#"}
             sx={{
-              width: `${100 / banners.length}%`,
+              width: `${100 / (banners.length + 1)}%`,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -73,10 +92,27 @@ const Home = () => {
             />
           </Box>
         ))}
+
+        {/* Clone first banner for smooth loop */}
+        <Box
+          component="a"
+          sx={{
+            width: `${100 / (banners.length + 1)}%`,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            component="img"
+            src={banners[0]?.imageUrl}
+            alt={banners[0]?.title || "Banner"}
+            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </Box>
       </Stack>
 
       {/* Dots */}
-      
       <Stack
         direction="row"
         spacing={1}
@@ -85,19 +121,25 @@ const Home = () => {
           bottom: 10,
           left: "50%",
           transform: "translateX(-50%)",
-          display:{xs: "none", sm: "flex"},
+          display: { xs: "none", sm: "flex" },
         }}
       >
         {banners.map((_, idx) => (
           <IconButton
             key={idx}
             size="small"
-            onClick={() => setCurrentIndex(idx)}
+            onClick={() => {
+              setCurrentIndex(idx);
+              setIsTransitioning(true);
+            }}
             sx={{
               width: 30,
               height: 10,
               borderRadius: "10px",
-              bgcolor: idx === currentIndex ? "primary.main" : "white",
+              bgcolor:
+                idx === (currentIndex % banners.length)
+                  ? "primary.main"
+                  : "white",
               "&:hover": { bgcolor: "grey.600" },
             }}
           />

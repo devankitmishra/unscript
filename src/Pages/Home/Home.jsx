@@ -30,12 +30,34 @@ const Home = () => {
   useEffect(() => {
     if (banners.length === 0) return;
 
-    slideInterval.current = setInterval(() => {
-      setCurrentIndex((prev) => prev + 1);
-      setIsTransitioning(true);
-    }, 3000);
+    const startSlider = () => {
+      slideInterval.current = setInterval(() => {
+        setCurrentIndex((prev) => prev + 1);
+        setIsTransitioning(true);
+      }, 3000);
+    };
 
-    return () => clearInterval(slideInterval.current);
+    const stopSlider = () => {
+      if (slideInterval.current) clearInterval(slideInterval.current);
+    };
+
+    // Pause when tab is inactive
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopSlider();
+      } else {
+        stopSlider();
+        startSlider();
+      }
+    };
+
+    startSlider();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      stopSlider();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [banners]);
 
   if (banners.length === 0) return null;
@@ -43,10 +65,13 @@ const Home = () => {
   const HEADER_HEIGHT = 64;
 
   const handleTransitionEnd = () => {
-    // When we reach the cloned slide, reset without animation
     if (currentIndex === banners.length) {
-      setIsTransitioning(false); // disable animation
-      setCurrentIndex(0); // jump back to first
+      setIsTransitioning(false);
+      setCurrentIndex(0);
+    } else if (currentIndex > banners.length) {
+      // Extra safeguard if index overshoots
+      setIsTransitioning(false);
+      setCurrentIndex(currentIndex % banners.length);
     }
   };
 
@@ -137,7 +162,7 @@ const Home = () => {
               height: 10,
               borderRadius: "10px",
               bgcolor:
-                idx === (currentIndex % banners.length)
+                idx === currentIndex % banners.length
                   ? "primary.main"
                   : "white",
               "&:hover": { bgcolor: "grey.600" },

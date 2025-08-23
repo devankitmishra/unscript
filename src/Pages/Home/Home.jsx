@@ -13,11 +13,19 @@ const Home = () => {
 
   // Fetch banners
   useEffect(() => {
+    const cached = sessionStorage.getItem("banners");
+
+    if (cached) {
+      setBanners(JSON.parse(cached));
+      return; // ✅ use cache if available
+    }
+
     setLoading(true);
     axios
       .get(`${baseUrl}/api/banners`)
       .then((res) => {
         setBanners(res.data);
+        sessionStorage.setItem("banners", JSON.stringify(res.data));
         setLoading(false);
       })
       .catch((err) => {

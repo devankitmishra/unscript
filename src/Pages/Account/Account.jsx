@@ -51,6 +51,50 @@ const dummyAddresses = [
     country: "India",
     house: "Block C, 3rd Floor, Sunshine Residency",
   },
+  {
+    id: 4,
+    name: "Arjun Verma",
+    area: "Koramangala",
+    landmark: "Opposite Forum Mall",
+    pin: "560034",
+    state: "Karnataka",
+    city: "Bangalore",
+    country: "India",
+    house: "House No. 21, 2nd Cross",
+  },
+  {
+    id: 5,
+    name: "Sneha Patel",
+    area: "Navrangpura",
+    landmark: "Near Gujarat University",
+    pin: "380009",
+    state: "Gujarat",
+    city: "Ahmedabad",
+    country: "India",
+    house: "Shreeji Apartment, 1st Floor",
+  },
+  {
+    id: 6,
+    name: "Manoj Kumar",
+    area: "Civil Lines",
+    landmark: "Opposite High Court",
+    pin: "211001",
+    state: "Uttar Pradesh",
+    city: "Prayagraj",
+    country: "India",
+    house: "12/4, Krishna Residency",
+  },
+  {
+    id: 7,
+    name: "Neha Reddy",
+    area: "Madhapur",
+    landmark: "Near Inorbit Mall",
+    pin: "500081",
+    state: "Telangana",
+    city: "Hyderabad",
+    country: "India",
+    house: "Flat 307, Lotus Heights",
+  },
 ];
 
 const Account = () => {
@@ -58,6 +102,7 @@ const Account = () => {
   const [greeting, setGreeting] = useState("");
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [primaryId, setPrimaryId] = useState(1);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -83,6 +128,10 @@ const Account = () => {
 
   const firstName = userInfo?.name?.split(" ")[0] || "User";
 
+  const sortedAddresses = [...dummyAddresses].sort((a, b) =>
+    a.id === primaryId ? -1 : b.id === primaryId ? 1 : 0
+  );
+
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -100,10 +149,17 @@ const Account = () => {
     >
       {/* Greeting + Logout */}
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant={{ xs: "body1", md: "h5" }} fontWeight="bold">
+        {/* <Typography variant={{ xs: "body1", md: "h5" }} fontWeight="bold">
           {greeting}, {firstName}
+        </Typography> */}
+        <Typography variant={{ xs: "body1", md: "h5" }} fontWeight="bold">
+          Hi! {firstName}
         </Typography>
-        <Button variant="outlined" onClick={handleLogout}>
+        <Button
+          variant="outlined"
+          onClick={handleLogout}
+          sx={{ borderRadius: 0 }}
+        >
           Logout
         </Button>
       </Stack>
@@ -111,7 +167,7 @@ const Account = () => {
       {/* Main Options */}
       <Grid container spacing={2}>
         <Grid size={12}>
-          <Card>
+          <Card sx={{ borderRadius: 0 }}>
             <CardContent>
               <Typography variant="h6" gutterBottom color="primary.main">
                 Personal Info
@@ -147,40 +203,7 @@ const Account = () => {
           </Card>
         </Grid>
 
-        <Grid size={6}>
-          <Card
-            onClick={() => navigate("wishlist")}
-            sx={{
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              height: "100%",
-              display: { xs: "none", sm: "block" },
-            }}
-          >
-            <CardContent sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              {/* <FavoriteBorderIcon color="primary" fontSize="medium" /> */}
-              <FaHeart style={{ color: "red" }} size={25} />
-              <Box>
-                <Typography variant="body1">Wishlist</Typography>
-                <Typography variant="subtitle2" color="text.secondary">
-                  View and manage your saved items.
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            onClick={() => navigate("wishlist")}
-            startIcon={<FaHeart style={{ color: "red" }} />}
-            sx={{ display: { xs: "flex", sm: "none" }, height: "100%" }}
-          >
-            Wishlist
-          </Button>
-        </Grid>
-
+        {/* ordes  */}
         <Grid size={6}>
           <Card
             onClick={() => navigate("orders")}
@@ -190,6 +213,7 @@ const Account = () => {
               alignItems: "center",
               bgcolor: "#FFF9C4",
               display: { xs: "none", sm: "block" },
+              borderRadius: 0,
             }}
           >
             <CardContent sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -217,16 +241,57 @@ const Account = () => {
               height: "100%",
               bgcolor: "#FFF9C4",
               color: "black",
+              borderRadius: 0,
             }}
           >
             Orders
           </Button>
         </Grid>
 
+        {/* wishlist */}
+        <Grid size={6}>
+          <Card
+            onClick={() => navigate("wishlist")}
+            sx={{
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              display: { xs: "none", sm: "block" },
+              borderRadius: 0,
+            }}
+          >
+            <CardContent sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              {/* <FavoriteBorderIcon color="primary" fontSize="medium" /> */}
+              <FaHeart style={{ color: "red" }} size={25} />
+              <Box>
+                <Typography variant="body1">Wishlist</Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  View and manage your saved items.
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+          <Button
+            fullWidth
+            variant="outlined"
+            size="large"
+            onClick={() => navigate("wishlist")}
+            startIcon={<FaHeart style={{ color: "red" }} />}
+            sx={{
+              display: { xs: "flex", sm: "none" },
+              height: "100%",
+              borderRadius: 0,
+            }}
+          >
+            Wishlist
+          </Button>
+        </Grid>
+
         {/* Saved Addresses Preview */}
         <Grid size={12}>
-          <Card>
-            <CardContent>
+          <Card sx={{ borderRadius: 0 }}>
+            <CardContent sx={{ position: "relative" }}>
               <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -237,37 +302,80 @@ const Account = () => {
                 </Typography>
                 <Button
                   variant="contained"
-                  onClick={() => {
-                    navigate("address");
-                  }}
+                  onClick={() => navigate("address")}
+                  sx={{ borderRadius: 0 }}
                 >
                   Manage
                 </Button>
               </Stack>
+
               <Divider sx={{ my: 2 }} />
-              <Grid container spacing={2}>
-                {dummyAddresses.map((addr) => (
-                  <Grid size={{ xs: 12, md: 6 }} key={addr.id}>
-                    <Typography variant="body1" color="primary.main">
-                      {addr.name}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                      {" "}
-                      {[
-                        addr.house,
-                        addr.area,
-                        addr.landmark,
-                        addr.city,
-                        addr.state,
-                        addr.pin,
-                        addr.country,
-                      ]
-                        .filter(Boolean)
-                        .join(", ")}
-                    </Typography>
-                  </Grid>
-                ))}
-              </Grid>
+
+              {/* Scrollable container */}
+              <Box
+                sx={{
+                  maxHeight: 240,
+                  overflowY: "auto",
+                  pb: 1,
+                  position: "relative",
+                  "&::-webkit-scrollbar": { display: "none" },
+                  scrollbarWidth: "none",
+                }}
+              >
+                <Grid container spacing={2}>
+                  {sortedAddresses.map((addr) => (
+                    <Grid
+                      size={{ xs: 12, md: 6 }}
+                      key={addr.id}
+                      sx={{
+                        p: 2,
+                        bgcolor:
+                          addr.id === primaryId ? "primary.main" : "grey.100",
+                        color: addr.id === primaryId ? "white" : "text.primary",
+                        cursor: "pointer",
+                        transition: "0.3s",
+                        "&:hover": {
+                          boxShadow: 3,
+                        },
+                      }}
+                      onClick={() => setPrimaryId(addr.id)}
+                    >
+                      <Typography variant="body1" fontWeight="bold">
+                        {addr.name}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        {[
+                          addr.house,
+                          addr.area,
+                          addr.landmark,
+                          addr.city,
+                          addr.state,
+                          addr.pin,
+                          addr.country,
+                        ]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+
+              {/* Fade overlay if >3 addresses */}
+              {dummyAddresses.length > 3 && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 40,
+                    background: (theme) =>
+                      `linear-gradient(to bottom, rgba(255,255,255,0), ${theme.palette.background.paper} 90%)`,
+                    pointerEvents: "none",
+                  }}
+                />
+              )}
             </CardContent>
           </Card>
         </Grid>

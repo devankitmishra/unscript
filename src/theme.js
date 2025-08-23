@@ -39,14 +39,15 @@ const theme = createTheme({
     button: { textTransform: "none" },
   },
   components: {
-    // MuiButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       borderRadius: 0,
-    //       // padding: "8px 20px",
-    //     },
-    //   },
-    // },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+          textTransform: "none",
+          // padding: "8px 20px",
+        },
+      },
+    },
     // MuiIconButton: {
     //   styleOverrides: {
     //     root: {

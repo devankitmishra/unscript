@@ -161,19 +161,19 @@ const Home = () => {
           <IconButton
             key={idx}
             size="small"
-            onClick={() => {
-              setCurrentIndex(idx);
-              setIsTransitioning(true);
-            }}
+            disableRipple
             sx={{
-              width: 30,
-              height: 10,
-              borderRadius: "10px",
+              width: 50,
+              height: 3,
+              borderRadius: "20px",
+              p: 0,
+              minWidth: 0,
+              minHeight: 0,
               bgcolor:
                 idx === currentIndex % banners.length
                   ? "primary.main"
                   : "white",
-              "&:hover": { bgcolor: "grey.600" },
+              cursor: "default",
             }}
           />
         ))}

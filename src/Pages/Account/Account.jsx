@@ -241,7 +241,6 @@ const Account = () => {
               height: "100%",
               bgcolor: "#FFF9C4",
               color: "black",
-              borderRadius: 0,
             }}
           >
             Orders
@@ -281,7 +280,6 @@ const Account = () => {
             sx={{
               display: { xs: "flex", sm: "none" },
               height: "100%",
-              borderRadius: 0,
             }}
           >
             Wishlist
@@ -303,7 +301,6 @@ const Account = () => {
                 <Button
                   variant="contained"
                   onClick={() => navigate("address")}
-                  sx={{ borderRadius: 0 }}
                 >
                   Manage
                 </Button>

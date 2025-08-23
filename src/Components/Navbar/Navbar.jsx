@@ -27,7 +27,6 @@ import Slide from "@mui/material/Slide";
 // Styled search components
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.black, 0.05),
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.black, 0.1),
@@ -128,7 +127,7 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                 <SearchIcon style={{ color: theme.palette.primary.main }} />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search for products"
+                placeholder="Search Products..."
                 inputProps={{ "aria-label": "search" }}
                 sx={{ color: "primary.main" }}
               />
@@ -171,16 +170,6 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                         color="inherit"
                         startIcon={<BiUser size={22} />}
                         onClick={() => navigate("/account")}
-                        sx={{
-                          textTransform: "none",
-                          borderColor: "primary.main",
-                          color: "primary.main",
-                          "&:hover": {
-                            borderColor: "secondary.main",
-                            color: "secondary.main",
-                          },
-                          transition: "color 0.2s, border-color 0.2s",
-                        }}
                       >
                         Account
                       </Button>
@@ -202,7 +191,10 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
                       variant="contained"
                       onClick={() => setAuthDrawerOpen(true)}
                       size="small"
-                      sx={{ display: { xs: "block", sm: "none" } }}
+                      sx={{
+                        display: { xs: "block", sm: "none" },
+                        borderRadius: 0,
+                      }}
                     >
                       Login
                     </Button>

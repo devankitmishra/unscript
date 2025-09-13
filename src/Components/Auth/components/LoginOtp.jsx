@@ -41,11 +41,11 @@ const LoginOtp = ({ email, onVerify, setStep }) => {
         {
           email,
           otp: Number(values.otp),
-        }
+        },{ withCredentials: true }
       );
       console.log("API Response:", response.data);
-      login(response.data.token);
-      onVerify(); // call parent callback
+      login(response.data.accessToken);
+      onVerify();
     } catch (error) {
       console.error("OTP verification error:", error);
       setErrors({ otp: "Invalid OTP, please try again" });

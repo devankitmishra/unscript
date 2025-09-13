@@ -77,6 +77,8 @@ const Navbar = ({ loggedIn, onMenuToggle }) => {
   const toggleDropdown = () => setOpenDropdown((prev) => !prev);
   const closeDropdown = () => setOpenDropdown(false);
 
+
+
   return (
     <>
       {/* Navbar */}

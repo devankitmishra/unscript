@@ -55,27 +55,27 @@ const theme = createTheme({
     //     },
     //   },
     // },
-    // MuiOutlinedInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       borderRadius: 0,
-    //     },
-    //   },
-    // },
-    // MuiFilledInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       borderRadius: 0,
-    //     },
-    //   },
-    // },
-    // MuiInput: {
-    //   styleOverrides: {
-    //     root: {
-    //       borderRadius: 0,
-    //     },
-    //   },
-    // },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
   },
 });
 

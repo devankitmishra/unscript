@@ -16,6 +16,8 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import { FaHeart } from "react-icons/fa";
 import { FcPackage } from "react-icons/fc";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import { baseUrl } from "../../Config/Config";
 
 const dummyAddresses = [
   {
@@ -110,7 +112,7 @@ const Account = () => {
       try {
         const decoded = jwtDecode(token);
         setUserInfo(decoded);
-        console.log(decoded);
+        // console.log(decoded);
       } catch (error) {
         console.error("Invalid token:", error);
       }
@@ -132,9 +134,15 @@ const Account = () => {
     a.id === primaryId ? -1 : b.id === primaryId ? 1 : 0
   );
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await axios.get(`${baseUrl}/api/auth/logout`, { withCredentials: true });
+      logout();
+      navigate("/");
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+    }
   };
 
   return (
@@ -298,10 +306,7 @@ const Account = () => {
                 <Typography variant="h6" gutterBottom>
                   Saved Addresses
                 </Typography>
-                <Button
-                  variant="contained"
-                  onClick={() => navigate("address")}
-                >
+                <Button variant="contained" onClick={() => navigate("address")}>
                   Manage
                 </Button>
               </Stack>

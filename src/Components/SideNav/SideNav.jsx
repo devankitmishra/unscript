@@ -28,7 +28,7 @@ const SideNav = ({ mobileOpen, onClose }) => {
 
   // Fetch menu data immediately on mount
   useEffect(() => {
-    fetch(`${baseUrl}/api/menu`)
+    fetch(`${baseUrl}/menu`)
       .then((res) => res.json())
       .then((data) => setMenuItems(data))
       .catch((err) => console.error("Error fetching menu:", err));
